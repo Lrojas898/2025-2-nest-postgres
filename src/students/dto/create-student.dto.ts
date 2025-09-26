@@ -1,10 +1,12 @@
-import {IsString, IsNumber, IsEmail, IsIn, IsArray} from 'class-validator'
+import {IsString, IsNumber, IsEmail, IsIn, IsArray, IsPositive, IsOptional} from 'class-validator'
 export class CreateStudentDto {
    
         @IsString()
         name: string;
     
         @IsNumber()
+        @IsPositive()
+        @IsOptional()
         age: number;
     
         @IsString()
