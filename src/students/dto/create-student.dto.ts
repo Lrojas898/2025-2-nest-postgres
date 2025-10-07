@@ -12,10 +12,7 @@ export class CreateStudentDto {
         @IsString()
         @IsEmail()
         email:string;
-    
-        @IsString()
-        nickname: string;
-    
+       
          @IsString()
          @IsIn(['Male', 'Female', 'Other'])
         gender: string;

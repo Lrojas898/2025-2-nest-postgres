@@ -1,9 +1,11 @@
-import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Student } from './entities/student.entity';
 import { Repository } from 'typeorm';
+import { PaginationDto } from './dto/pagination.dto';
+import { isUUID } from 'class-validator';
 
 @Injectable()
 export class StudentsService {
@@ -24,12 +26,36 @@ export class StudentsService {
     }
   }
 
-  findAll() {
-    return `This action returns all students`;
+  async findAll(paginationDto: PaginationDto) {
+    try{
+      const {limit, offset} = paginationDto;
+      return await this.studentRepository.find({
+        take: limit,
+        skip: offset
+      });
+    }catch(error){
+      this.handleException(error);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} student`;
+  async findOne(term: string) {
+    let student : Student | null;
+
+    if(isUUID(term)){
+      student = await this.studentRepository.findOneBy({id: term})
+    }else{
+      const queryBuilder = this.studentRepository.createQueryBuilder('student');
+      student = await queryBuilder.where('UPPER(name)=:name or nickname=:nickname',{
+        name: term.toUpperCase(),
+        nickname: term.toLowerCase()
+      })
+      .getOne()
+    }
+
+    if(!student)
+      throw new NotFoundException(`Student with ${term} not found`);
+
+    return student;
   }
 
   update(id: number, updateStudentDto: UpdateStudentDto) {

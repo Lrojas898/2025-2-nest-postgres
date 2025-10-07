@@ -1,4 +1,4 @@
-import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
+import {BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
 
 @Entity()
 export class Student {
@@ -32,4 +32,23 @@ export class Student {
         array: true
     })
     subjects: string[]
+
+    @BeforeInsert()
+    checkNicknameInsert(){
+        if(!this.nickname){
+            this.nickname = this.name
+        }
+
+        this.nickname = this.nickname.toLowerCase()
+                        .replace(" ", "_")
+                        +this.age;
+    }
+
+    @BeforeUpdate()
+    checkNicknameUpdate(){
+        this.nickname = this.nickname.toLowerCase()
+                        .replace("", "_")
+                        +this.age;
+    }
+
 }
