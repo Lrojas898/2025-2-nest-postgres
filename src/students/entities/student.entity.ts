@@ -47,7 +47,7 @@ export class Student {
     @BeforeUpdate()
     checkNicknameUpdate(){
         this.nickname = this.nickname.toLowerCase()
-                        .replace("", "_")
+                        .replace(" ", "_")
                         +this.age;
     }
 

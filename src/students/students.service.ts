@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger, NotFoundException, ParseUUIDPipe } from '@nestjs/common';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -58,12 +58,25 @@ export class StudentsService {
     return student;
   }
 
-  update(id: number, updateStudentDto: UpdateStudentDto) {
-    return `This action updates a #${id} student`;
+  async update(id: string, updateStudentDto: UpdateStudentDto) {
+    const student = await this.studentRepository.preload({
+      id:id,
+      ...updateStudentDto
+    })
+
+    if(!student) throw new NotFoundException(`Student with id ${id} not found`);
+
+    try{
+      await this.studentRepository.save(student);
+      return student;
+    }catch(error){
+      this.handleException(error);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} student`;
+  async remove(id: string) {
+    const student = await this.findOne(id);
+    await this.studentRepository.remove(student);
   }
 
   private handleException(error){

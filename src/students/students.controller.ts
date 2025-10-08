@@ -25,11 +25,11 @@ export class StudentsController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateStudentDto: UpdateStudentDto) {
-    return this.studentsService.update(+id, updateStudentDto);
+    return this.studentsService.update(id, updateStudentDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.studentsService.remove(+id);
+    return this.studentsService.remove(id);
   }
 }
