@@ -1,4 +1,5 @@
 import {IsString, IsNumber, IsEmail, IsIn, IsArray, IsPositive, IsOptional} from 'class-validator'
+import { Grade } from '../entities/grade.entity';
 export class CreateStudentDto {
    
         @IsString()
@@ -18,5 +19,9 @@ export class CreateStudentDto {
         gender: string;
 
         @IsArray()
-        subjects: string[]
+        subjects: string[];
+
+        @IsArray()
+        @IsOptional()
+        grades: Grade[];
 }
