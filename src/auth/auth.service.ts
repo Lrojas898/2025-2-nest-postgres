@@ -5,6 +5,9 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
+import { Jwt } from './interfaces/jwt.interface';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -12,7 +15,8 @@ export class AuthService {
 
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>
+    private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService
   ){}
 
   async create(createUserDto: CreateUserDto) {
@@ -24,7 +28,14 @@ export class AuthService {
       });
       await this.userRepository.save(user);
       delete user.password;
-      return user;
+      
+      return {
+      ...user,
+      token: this.getJwtToken(
+        {id: user.id, 
+          email: user.email
+        })
+    };
     }catch(error){
       this.handleException(error);
     }
@@ -34,7 +45,7 @@ export class AuthService {
     const {email, password} = loginDto;
     const user = await this.userRepository.findOne({
       where: {email},
-      select: {email: true, password: true}
+      select: {email: true, password: true, id:true}
     })
 
     if(!user) throw new NotFoundException(`User ${email} not found`)
@@ -43,28 +54,24 @@ export class AuthService {
         throw new UnauthorizedException(`Email or password incorrect`);
 
     delete user.password;
-    return user;
+    return {
+      ...user,
+      token: this.getJwtToken(
+        {id: user.id, 
+          email: user.email
+        })
+    };
   }   
 
   encryptPassword(password){
     return bcrypt.hashSync(password, 10)
   }
 
-  // findAll() {
-  //   return `This action returns all auth`;
-  // }
-
-  // findOne(id: number) {
-  //   return `This action returns a #${id} auth`;
-  // }
-
-  // update(id: number, updateAuthDto: UpdateAuthDto) {
-  //   return `This action updates a #${id} auth`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} auth`;
-  // }
+  private getJwtToken(payload: Jwt){
+    const token = this.jwtService.sign(payload);
+    return token;
+  }
+  
   private handleException(error){
       this.logger.error(error);
       if(error.code === '23505')
