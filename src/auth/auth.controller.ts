@@ -7,6 +7,8 @@ import { GetUser } from './decorators/get-user.decorator';
 import { User } from './entities/user.entity';
 import { RawHeaders } from './decorators/raw-headers.decorator';
 import { UserRoleGuard } from './guards/user-role/user-role.guard';
+import { Auth } from './decorators/auth.decorator';
+import { ValidRoles } from './enums/roles.enum';
 
 @Controller('auth')
 export class AuthController {
@@ -23,15 +25,8 @@ export class AuthController {
   }
 
   @Get('private')
-  
-  @UseGuards(AuthGuard(), UserRoleGuard)
-  @SetMetadata('roles', ['admin', 'teacher'])
-  testPrivate(
-    //@GetUser() user: User
-    //@RawHeaders() headers: Headers
-    
-  ){
-    //console.log("🚀 ~ :29 ~ AuthController ~ testPrivate ~ user:", user)
+  @Auth(ValidRoles.admin)
+  testPrivate(){
     return {
       ok: true,
       message: 'logged in'

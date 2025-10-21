@@ -3,6 +3,8 @@ import { StudentsService } from './students.service';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { PaginationDto } from './dto/pagination.dto';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { ValidRoles } from 'src/auth/enums/roles.enum';
 
 @Controller('students')
 export class StudentsController {
@@ -24,6 +26,7 @@ export class StudentsController {
   }
 
   @Patch(':id')
+  @Auth(ValidRoles.teacher)
   update(@Param('id') id: string, @Body() updateStudentDto: UpdateStudentDto) {
     return this.studentsService.update(id, updateStudentDto);
   }
