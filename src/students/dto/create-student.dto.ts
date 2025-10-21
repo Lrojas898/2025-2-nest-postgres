@@ -1,7 +1,9 @@
 import {IsString, IsNumber, IsEmail, IsIn, IsArray, IsPositive, IsOptional} from 'class-validator'
 import { Grade } from '../entities/grade.entity';
+import { ApiProperty } from '@nestjs/swagger';
 export class CreateStudentDto {
    
+        @ApiProperty()
         @IsString()
         name: string;
     
