@@ -6,9 +6,18 @@ Este proyecto implementa un sistema de monitoreo para una aplicación NestJS des
 
 ### Prometheus
 
+<img width="1907" height="1047" alt="image" src="https://github.com/user-attachments/assets/9b3391aa-1527-41ea-8137-a1d8c65681d0" />
+
+
+
 Sistema de monitoreo y base de datos de series temporales (TSDB) que recolecta métricas de aplicaciones mediante HTTP pull. Almacena las métricas con marcas de tiempo y permite realizar consultas mediante PromQL (Prometheus Query Language).
 
 ### Grafana
+<img width="1911" height="1037" alt="image" src="https://github.com/user-attachments/assets/e916841a-b933-40dd-a593-77da3aaf597f" />
+
+
+<img width="1905" height="1040" alt="image" src="https://github.com/user-attachments/assets/37dde0a2-7158-43a1-b139-4c2ba19dfd5e" />
+
 
 Plataforma de visualización y análisis de métricas que permite crear dashboards interactivos. Se conecta a fuentes de datos como Prometheus para visualizar métricas en tiempo real mediante gráficas, tablas y alertas.
 
@@ -39,6 +48,9 @@ Plataforma de visualización y análisis de métricas que permite crear dashboar
 ```
 
 ---
+
+<img width="1905" height="1033" alt="image" src="https://github.com/user-attachments/assets/addaa524-04e6-45fb-b18b-f9e2929b9ad7" />
+
 
 ## Configuración Realizada
 
@@ -210,7 +222,6 @@ services:
 
 Acceder a http://44.220.138.169:9090/targets para verificar que el target `nestjs-app` está en estado UP.
 
-[CAPTURA: Prometheus Targets]
 
 Ejecutar query en http://44.220.138.169:9090/graph:
 
@@ -218,7 +229,8 @@ Ejecutar query en http://44.220.138.169:9090/graph:
 process_resident_memory_bytes{job="nestjs-app"}
 ```
 
-[CAPTURA: Prometheus Query]
+<img width="1918" height="1037" alt="image" src="https://github.com/user-attachments/assets/1d9efa96-4ef7-4f39-8673-a9b4283717f7" />
+
 
 ### Grafana
 
@@ -226,23 +238,20 @@ Acceder a http://44.220.138.169:3001 con credenciales:
 - Usuario: `admin`
 - Contraseña: `admin123`
 
-[CAPTURA: Grafana Login]
+<img width="1913" height="1033" alt="image" src="https://github.com/user-attachments/assets/a5dc0dcb-41e6-4cd4-85cb-83dacb652279" />
+
 
 Dashboard en http://44.220.138.169:3001/d/aded1d20-041d-490c-9be4-82fbc8f05813/nestjs-application-monitoring
 
-[CAPTURA: Grafana Dashboard CPU]
+<img width="1912" height="1041" alt="image" src="https://github.com/user-attachments/assets/7fde862a-f521-4689-8617-f92296ef9f0f" />
 
-[CAPTURA: Grafana Dashboard Memory]
-
-[CAPTURA: Grafana Dashboard Event Loop]
-
-[CAPTURA: Grafana Dashboard Heap]
 
 ### Métricas de la aplicación
 
 Endpoint de métricas en formato Prometheus: http://44.220.138.169:3000/api/metrics
+<img width="1908" height="1043" alt="image" src="https://github.com/user-attachments/assets/d38bfef9-6059-4b1d-b176-964d2d7c20ab" />
 
-[CAPTURA: Metrics Endpoint Raw]
+
 
 ---
 
